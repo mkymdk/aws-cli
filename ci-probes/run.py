@@ -15,6 +15,14 @@ run('original-delayed',[test,'-p','oca_macos_delay_probe'],1)
 subprocess.run(['git','apply','ci-probes/autoprompt-wait.patch'],check=True)
 run('fixed-delayed',[test,'-p','oca_macos_delay_probe'])
 run('broken-handler-still-fails',[test,'-p','oca_macos_delay_probe'],1,{'OCA_DISABLE_DIALOG':'1'})
+initialization='tests/functional/autoprompt/test_prompttoolkit.py::TestPromptToolkitPrompterBuffer::test_handle_args_with_spaces'
+run('initialization-original-delayed',[initialization,'-p','oca_initialization_probe'],1)
+subprocess.run(['git','apply','ci-probes/initialization-wait.patch'],check=True)
+run('initialization-fixed-delayed',[initialization,'-p','oca_initialization_probe'])
+run('initialization-broken-still-fails',[initialization,'-p','oca_initialization_probe'],1,{'OCA_SKIP_FINALIZATION':'1'})
 run('fixed-whole-module',['tests/functional/autoprompt/test_prompttoolkit.py','-n','3','--dist=loadfile'])
 for i in range(10):
  run('fixed-delayed-repeat-'+str(i),[test,'-p','oca_macos_delay_probe'])
+
+for i in range(10):
+ run('initialization-fixed-repeat-'+str(i),[initialization,'-p','oca_initialization_probe'])
