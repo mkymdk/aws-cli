@@ -1,0 +1,21 @@
+name: Output panel timing diagnostic
+on:
+  push:
+    branches: ['diagnostic/6595-output-panel-v2']
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405
+        with:
+          python-version: '3.14'
+      - run: python scripts/ci/install
+      - run: python diagnostic/run_output.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: output-panel-timing
+          path: diagnostic-results/
